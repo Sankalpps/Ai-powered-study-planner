@@ -33,14 +33,22 @@ const AIService = {
 
   /**
    * Gets preferred model identifier.
-   * @returns {string} Model name (e.g., 'gemini-2.0-flash')
+   * @returns {string} Model name
    */
   getSelectedModel() {
-    return (
+    const storedModel =
       localStorage.getItem('celebo_selected_model') ||
-      localStorage.getItem('celebrio_selected_model') ||
-      'gemini-2.0-flash'
-    );
+      localStorage.getItem('celebrio_selected_model');
+    const retiredModels = {
+      'gemini-1.5-flash': 'gemini-3.5-flash',
+      'gemini-2.0-flash': 'gemini-3.5-flash',
+      'gemini-2.0-flash-lite': 'gemini-3.5-flash-lite',
+      'gemini-2.5-flash': 'gemini-3.5-flash',
+      'gemini-2.5-flash-lite': 'gemini-3.5-flash-lite',
+      'gemini-3.8-flash': 'gemini-3.5-flash',
+      'gemini-3.8-flash-lite': 'gemini-3.5-flash-lite'
+    };
+    return retiredModels[storedModel] || storedModel || 'gemini-3.5-flash';
   },
 
   /**

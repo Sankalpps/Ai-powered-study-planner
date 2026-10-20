@@ -3,7 +3,12 @@
  * @module services/geminiService
  */
 
-const { DEFAULT_GEMINI_KEY, DEFAULT_MODEL, FALLBACK_MODEL } = require('../config/constants');
+const {
+  DEFAULT_GEMINI_KEY,
+  DEFAULT_MODEL,
+  FALLBACK_MODEL,
+  normalizeModel
+} = require('../config/constants');
 
 /** HTTP status codes that should NOT be retried or cascaded — the request itself is invalid. */
 const NON_RETRYABLE_STATUSES = new Set([400, 401, 403, 404]);
@@ -55,7 +60,11 @@ async function callGeminiAPI(
   }
 
   // Model cascade: primary first, followed by fallbacks
-  const modelsToTry = [requestedModel || DEFAULT_MODEL, FALLBACK_MODEL, 'gemini-3.5-flash'];
+  const modelsToTry = [
+    normalizeModel(requestedModel || DEFAULT_MODEL),
+    FALLBACK_MODEL,
+    'gemini-3.5-flash'
+  ];
   const uniqueModels = [...new Set(modelsToTry)];
 
   let lastError = null;
