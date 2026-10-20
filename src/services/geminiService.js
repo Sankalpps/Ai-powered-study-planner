@@ -17,7 +17,7 @@ const NON_RETRYABLE_STATUSES = new Set([400, 401, 403, 404]);
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503]);
 
 /** Per-model-attempt timeout in milliseconds (AbortController). */
-const MODEL_ATTEMPT_TIMEOUT_MS = 10_000;
+const MODEL_ATTEMPT_TIMEOUT_MS = 25_000;
 
 /** Delay before a retry on the same model (ms). */
 const RETRY_DELAY_MS = 1_000;
@@ -28,7 +28,7 @@ const RETRY_DELAY_MS = 1_000;
  * **Cascade behaviour (Item 3):**
  * - 400 / 401 / 403 / 404 → throw immediately (bad request or invalid key).
  * - 429 / 5xx → retry ONCE on the same model after 1 s, then cascade.
- * - Timeout (10 s per attempt via AbortController) → cascade to next model.
+ * - Timeout (25 s per attempt via AbortController) → cascade to next model.
  *
  * **Structured-JSON mode (Item 1):**
  * Pass `options.jsonMode = true` to add `responseMimeType: "application/json"`

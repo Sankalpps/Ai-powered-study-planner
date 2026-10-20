@@ -27,5 +27,5 @@ module.exports = {
   normalizeModel,
   CACHE_TTL_MS: 30 * 60 * 1000, // 30 minutes in milliseconds
   MAX_CACHE_SIZE: 250,
-  REQUEST_TIMEOUT_MS: 30000
+  REQUEST_TIMEOUT_MS: 90000
 };
