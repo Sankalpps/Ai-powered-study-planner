@@ -1,5 +1,5 @@
 /**
- * @fileoverview Celebrio AI Frontend Client Service
+ * @fileoverview Celebo AI Frontend Client Service
  * Manages communication with backend Gemini AI endpoints and browser storage settings.
  * @module AIService
  */
@@ -10,7 +10,11 @@ const AIService = {
    * @returns {string} Custom API key or empty string
    */
   getCustomApiKey() {
-    return sessionStorage.getItem('celebrio_custom_api_key') || '';
+    return (
+      sessionStorage.getItem('celebo_custom_api_key') ||
+      sessionStorage.getItem('celebrio_custom_api_key') ||
+      ''
+    );
   },
 
   /**
@@ -19,8 +23,10 @@ const AIService = {
    */
   setCustomApiKey(key) {
     if (key) {
+      sessionStorage.setItem('celebo_custom_api_key', key.trim());
       sessionStorage.setItem('celebrio_custom_api_key', key.trim());
     } else {
+      sessionStorage.removeItem('celebo_custom_api_key');
       sessionStorage.removeItem('celebrio_custom_api_key');
     }
   },
@@ -30,7 +36,11 @@ const AIService = {
    * @returns {string} Model name (e.g., 'gemini-2.0-flash')
    */
   getSelectedModel() {
-    return localStorage.getItem('celebrio_selected_model') || 'gemini-2.0-flash';
+    return (
+      localStorage.getItem('celebo_selected_model') ||
+      localStorage.getItem('celebrio_selected_model') ||
+      'gemini-2.0-flash'
+    );
   },
 
   /**
@@ -38,7 +48,7 @@ const AIService = {
    * @param {string} model - Model identifier
    */
   setSelectedModel(model) {
-    localStorage.setItem('celebrio_selected_model', model);
+    localStorage.setItem('celebo_selected_model', model);
   },
 
   /**
@@ -134,7 +144,7 @@ const AIService = {
   },
 
   /**
-   * Sends conversational message with active event context to Celebrio Co-Pilot.
+   * Sends conversational message with active event context to Celebo Co-Pilot.
    * @param {string} message - User chat message
    * @param {Object} eventContext - Active celebration state
    * @param {Array<{role: string, text: string}>} [history=[]] - Prior turn history

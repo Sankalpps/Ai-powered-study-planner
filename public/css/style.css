@@ -1,4 +1,4 @@
-/* Celebrio AI - Celebration & Event Planner Design System */
+/* Celebo AI - Celebration & Event Planner Design System */
 
 :root {
   --primary: #6366f1;
@@ -1063,11 +1063,260 @@ dialog::backdrop {
 }
 
 
+/* Brand Glow & Subtitle */
+.brand-logo-glow {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(236, 72, 153, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.brand-subtitle {
+  font-size: 0.76rem;
+  color: #cbd5e1;
+  margin-top: 1px;
+  letter-spacing: 0.02em;
+}
+
+/* Hero Extra Elements */
+.hero-verified-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #059669;
+  background: #d1fae5;
+  border: 1px solid #a7f3d0;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+}
+
+.hero-actions-col {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
+}
+
+.hero-countdown-box {
+  background: var(--primary-light);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-md);
+  text-align: center;
+  min-width: 140px;
+}
+
+.hero-countdown-lbl {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hero-countdown-val {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--primary-hover);
+  line-height: 1.15;
+  margin-top: 0.15rem;
+}
+
+/* Equalizer Bars Animation */
+.equalizer-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+}
+
+.eq-bar {
+  width: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+  animation: eqBounce 1.2s ease-in-out infinite alternate;
+}
+
+.eq-bar:nth-child(1) { height: 6px; animation-delay: 0.1s; }
+.eq-bar:nth-child(2) { height: 14px; animation-delay: 0.3s; }
+.eq-bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+.eq-bar:nth-child(4) { height: 16px; animation-delay: 0.4s; }
+
+@keyframes eqBounce {
+  0% { transform: scaleY(0.3); }
+  100% { transform: scaleY(1); }
+}
+
+/* What-If Live Budget & Guest Simulator */
+.sim-card {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.04) 0%, rgba(236, 72, 153, 0.04) 100%);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.sim-pill-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: #ffffff;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+}
+
+.sim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.sim-control-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.sim-counter-badge {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.sim-counter-accent {
+  color: var(--accent);
+}
+
+.sim-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg-card-subtle);
+  outline: none;
+  cursor: pointer;
+  accent-color: var(--primary);
+  margin-top: 0.35rem;
+}
+
+.sim-metrics-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-card-subtle);
+  padding: 0.85rem 1.15rem;
+  border-radius: var(--radius-md);
+}
+
+.sim-metric-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sim-metric-lbl {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.sim-metric-val {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+/* Overview & Creative Box Styles */
+.vision-quote {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--text-main);
+  margin-bottom: 1.25rem;
+  border-left: 3px solid var(--primary);
+  padding-left: 0.85rem;
+  line-height: 1.6;
+}
+
+.music-vibe-box {
+  background: var(--bg-card-subtle);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.speech-output-box {
+  background: var(--bg-card-subtle);
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-height: 320px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.invite-preview-box {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1px solid #fed7aa;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.invite-headline {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #9a3412;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.invite-opening {
+  font-size: 0.95rem;
+  color: #c2410c;
+  margin-bottom: 0.85rem;
+  font-style: italic;
+}
+
+.invite-details {
+  font-size: 0.92rem;
+  color: #7c2d12;
+  margin-bottom: 0.85rem;
+  font-weight: 500;
+}
+
+.invite-rsvp {
+  font-size: 0.88rem;
+  color: #9a3412;
+  font-weight: 600;
+  border-top: 1px dashed #fdba74;
+  padding-top: 0.75rem;
+}
+
+.invite-dress-code {
+  font-size: 0.82rem;
+  color: #b45309;
+  margin-top: 0.35rem;
+}
+
 /* ============================================
-   Dark Mode (prefers-color-scheme: dark)
+   Dark Mode Theme System
    ============================================ */
-@media (prefers-color-scheme: dark) {
-  :root {
+:root[data-theme="dark"],
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
     --primary: #818cf8;
     --primary-hover: #6366f1;
     --primary-light: rgba(99, 102, 241, 0.15);
@@ -1100,111 +1349,155 @@ dialog::backdrop {
     --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.5);
   }
+}
 
-  body {
-    color-scheme: dark;
-  }
+:root[data-theme="dark"] {
+  --primary: #818cf8;
+  --primary-hover: #6366f1;
+  --primary-light: rgba(99, 102, 241, 0.15);
+  --primary-glow: rgba(129, 140, 248, 0.25);
 
-  .app-header {
-    background: linear-gradient(135deg, #0f0d2e 0%, #1e1b4b 60%, #312e81 100%);
-  }
+  --accent: #f472b6;
+  --accent-light: rgba(244, 114, 182, 0.15);
 
-  .event-hero-card {
-    background: linear-gradient(135deg, #1e293b 0%, #1e2a40 100%);
-  }
+  --success: #34d399;
+  --success-light: rgba(52, 211, 153, 0.15);
+  --warning: #fbbf24;
+  --warning-light: rgba(251, 191, 36, 0.15);
+  --danger: #f87171;
+  --danger-light: rgba(248, 113, 113, 0.15);
 
-  .btn-outline {
-    background: var(--bg-card);
-    color: var(--text-main);
-    border-color: var(--border);
-  }
-  .btn-outline:hover {
-    background: var(--bg-card-subtle);
-  }
+  --bg-main: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-subtle: #334155;
+  --bg-glass: rgba(30, 41, 59, 0.85);
 
-  .chat-bubble-ai {
-    background: var(--bg-card-subtle);
-    color: var(--text-main);
-  }
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-subtle: #cbd5e1;
+  --text-inverse: #0f172a;
 
-  .chat-input {
-    background: var(--bg-card);
-    color: var(--text-main);
-    border-color: var(--border);
-  }
+  --border: #475569;
+  --border-focus: #818cf8;
 
-  .chip {
-    background: var(--bg-card);
-    color: var(--text-muted);
-    border-color: var(--border);
-  }
-  .chip:hover {
-    background: var(--primary-light);
-    color: var(--primary);
-  }
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.5);
+}
 
-  .chat-quick-chips {
-    background: var(--bg-card-subtle);
-    border-top-color: var(--border);
-  }
+:root[data-theme="dark"] body,
+body:has([data-theme="dark"]) {
+  color-scheme: dark;
+}
 
-  .chat-input-row {
-    background: var(--bg-card);
-    border-top-color: var(--border);
-  }
+:root[data-theme="dark"] .app-header {
+  background: linear-gradient(135deg, #0f0d2e 0%, #1e1b4b 60%, #312e81 100%);
+}
 
-  dialog.custom-modal {
-    background: var(--bg-card);
-    color: var(--text-main);
-  }
+:root[data-theme="dark"] .event-hero-card {
+  background: linear-gradient(135deg, #1e293b 0%, #1e2a40 100%);
+}
 
-  dialog::backdrop {
-    background: rgba(0, 0, 0, 0.7);
-  }
+:root[data-theme="dark"] .btn-outline {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-color: var(--border);
+}
+:root[data-theme="dark"] .btn-outline:hover {
+  background: var(--bg-card-subtle);
+}
 
-  .form-input, .form-select, .form-textarea {
-    background: var(--bg-card-subtle);
-    color: var(--text-main);
-    border-color: var(--border);
-  }
+:root[data-theme="dark"] .chat-bubble-ai {
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+}
 
-  .drink-card {
-    background: linear-gradient(135deg, rgba(134, 25, 143, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
-    border-color: rgba(168, 85, 247, 0.3);
-  }
-  .drink-name { color: #c084fc; }
-  .drink-recipe { color: #d8b4fe; }
-  .drink-mocktail {
-    color: #c084fc;
-    background: rgba(0, 0, 0, 0.2);
-  }
+:root[data-theme="dark"] .chat-input {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-color: var(--border);
+}
 
-  .budget-tip-pill {
-    background: rgba(22, 163, 74, 0.15);
-    color: #4ade80;
-    border-color: rgba(74, 222, 128, 0.3);
-  }
+:root[data-theme="dark"] .chip {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+:root[data-theme="dark"] .chip:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
 
-  .badge-contracted { background: rgba(52, 211, 153, 0.15); color: #6ee7b7; }
-  .badge-inquired { background: rgba(129, 140, 248, 0.15); color: #a5b4fc; }
-  .badge-researching { background: rgba(251, 191, 36, 0.15); color: #fde68a; }
+:root[data-theme="dark"] .chat-quick-chips {
+  background: var(--bg-card-subtle);
+  border-top-color: var(--border);
+}
 
-  .toast {
-    background: #312e81;
-    color: #f1f5f9;
-  }
+:root[data-theme="dark"] .chat-input-row {
+  background: var(--bg-card);
+  border-top-color: var(--border);
+}
 
-  .event-select option {
-    background: var(--bg-card);
-    color: var(--text-main);
-  }
+:root[data-theme="dark"] dialog.custom-modal {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
 
-  @media print {
-    body {
-      background: #ffffff !important;
-      color: #000000 !important;
-    }
-  }
+:root[data-theme="dark"] dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+:root[data-theme="dark"] .form-input,
+:root[data-theme="dark"] .form-select,
+:root[data-theme="dark"] .form-textarea {
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .drink-card {
+  background: linear-gradient(135deg, rgba(134, 25, 143, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+:root[data-theme="dark"] .drink-name { color: #c084fc; }
+:root[data-theme="dark"] .drink-recipe { color: #d8b4fe; }
+:root[data-theme="dark"] .drink-mocktail {
+  color: #c084fc;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme="dark"] .invite-preview-box {
+  background: linear-gradient(135deg, #2d1810 0%, #3d2415 100%);
+  border-color: #7c2d12;
+}
+:root[data-theme="dark"] .invite-headline { color: #fdba74; }
+:root[data-theme="dark"] .invite-opening { color: #fed7aa; }
+:root[data-theme="dark"] .invite-details { color: #ffedd5; }
+:root[data-theme="dark"] .invite-rsvp { color: #fdba74; border-top-color: #7c2d12; }
+:root[data-theme="dark"] .invite-dress-code { color: #fb923c; }
+
+:root[data-theme="dark"] .sim-card {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+}
+
+:root[data-theme="dark"] .budget-tip-pill {
+  background: rgba(22, 163, 74, 0.15);
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+:root[data-theme="dark"] .badge-contracted { background: rgba(52, 211, 153, 0.15); color: #6ee7b7; }
+:root[data-theme="dark"] .badge-inquired { background: rgba(129, 140, 248, 0.15); color: #a5b4fc; }
+:root[data-theme="dark"] .badge-researching { background: rgba(251, 191, 36, 0.15); color: #fde68a; }
+
+:root[data-theme="dark"] .toast {
+  background: #312e81;
+  color: #f1f5f9;
+}
+
+:root[data-theme="dark"] .event-select option {
+  background: var(--bg-card);
+  color: var(--text-main);
 }
 
 /* ============================================

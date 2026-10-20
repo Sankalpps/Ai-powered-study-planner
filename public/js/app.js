@@ -1,5 +1,5 @@
 /**
- * @fileoverview Celebrio AI - Primary Frontend Application Controller
+ * @fileoverview Celebo AI - Primary Frontend Application Controller
  * Handles state synchronization, responsive view rendering, ARIA tab management, and DOM bindings.
  * @module app
  */
@@ -13,8 +13,10 @@ let chatHistory = [];
 
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
   loadEventsFromStorage();
   initEventListeners();
+  initSimulator();
   initModals();
   renderApp();
 });
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * Loads persisted events from browser localStorage or initializes with default showcase events.
  */
 function loadEventsFromStorage() {
-  const saved = localStorage.getItem('celebrio_events');
+  const saved = localStorage.getItem('celebo_events') || localStorage.getItem('celebrio_events');
   if (saved) {
     try {
       allEvents = JSON.parse(saved);
@@ -36,14 +38,65 @@ function loadEventsFromStorage() {
     saveEventsToStorage();
   }
 
-  const savedActiveId = localStorage.getItem('celebrio_active_event_id');
+  const savedActiveId =
+    localStorage.getItem('celebo_active_event_id') ||
+    localStorage.getItem('celebrio_active_event_id');
   activeEvent = allEvents.find((e) => e.id === savedActiveId) || allEvents[0];
 }
 
 function saveEventsToStorage() {
+  localStorage.setItem('celebo_events', JSON.stringify(allEvents));
   localStorage.setItem('celebrio_events', JSON.stringify(allEvents));
   if (activeEvent) {
+    localStorage.setItem('celebo_active_event_id', activeEvent.id);
     localStorage.setItem('celebrio_active_event_id', activeEvent.id);
+  }
+}
+
+/**
+ * Theme Manager: Dark/Light Mode with localStorage persistence and system preference fallback.
+ */
+function initTheme() {
+  const savedTheme =
+    localStorage.getItem('celebo_theme') ||
+    localStorage.getItem('celebrio_theme') ||
+    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light');
+
+  applyTheme(savedTheme);
+
+  const themeBtn = document.getElementById('btn-toggle-theme');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      localStorage.setItem('celebo_theme', next);
+      localStorage.setItem('celebrio_theme', next);
+      showToast(`Switched to ${next === 'dark' ? 'Dark' : 'Light'} Mode`);
+    });
+  }
+
+  // Listen for system preference changes if user hasn't explicitly set one
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('celebo_theme') && !localStorage.getItem('celebrio_theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const themeBtn = document.getElementById('btn-toggle-theme');
+  if (themeBtn) {
+    themeBtn.innerHTML =
+      theme === 'dark'
+        ? '<span aria-hidden="true">☀️</span> Light'
+        : '<span aria-hidden="true">🌙</span> Dark';
+    themeBtn.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`);
   }
 }
 
@@ -229,6 +282,9 @@ function renderBudgetTab() {
   const currency = activeEvent.summary?.currency || '$';
   const totalBudget = budget.total || activeEvent.summary?.budgetTotal || 0;
 
+  // Render What-If Simulator with active event values
+  renderSimulator();
+
   // Visual Multi-segment Progress Bar
   const progressBar = document.getElementById('budget-progress-bar');
   progressBar.innerHTML = '';
@@ -305,6 +361,139 @@ function removeBudgetCategory(idx) {
     renderHeroAndMetrics();
     showToast('Removed budget category.');
   }
+}
+
+/**
+ * What-If Live Budget & Guest Scale Simulator
+ */
+function initSimulator() {
+  const guestsSlider = document.getElementById('sim-guests');
+  const budgetSlider = document.getElementById('sim-budget');
+  const applyBtn = document.getElementById('btn-apply-simulation');
+
+  if (guestsSlider) {
+    guestsSlider.addEventListener('input', () => {
+      updateSimulationFromControls();
+    });
+  }
+
+  if (budgetSlider) {
+    budgetSlider.addEventListener('input', () => {
+      updateSimulationFromControls();
+    });
+  }
+
+  if (applyBtn) {
+    applyBtn.addEventListener('click', () => {
+      applySimulationToPlan();
+    });
+  }
+}
+
+function renderSimulator() {
+  if (!activeEvent) return;
+  const summary = activeEvent.summary || {};
+  const budget = activeEvent.budget || {};
+  const guests = summary.guestCount || 50;
+  const total = budget.total || summary.budgetTotal || 10000;
+
+  const guestsSlider = document.getElementById('sim-guests');
+  const budgetSlider = document.getElementById('sim-budget');
+
+  if (guestsSlider) {
+    guestsSlider.max = Math.max(1000, guests * 2);
+    guestsSlider.value = guests;
+  }
+
+  if (budgetSlider) {
+    budgetSlider.max = Math.max(250000, total * 2);
+    budgetSlider.value = total;
+  }
+
+  updateSimulationDisplay(guests, total);
+}
+
+function updateSimulationFromControls() {
+  const guestsSlider = document.getElementById('sim-guests');
+  const budgetSlider = document.getElementById('sim-budget');
+  if (!guestsSlider || !budgetSlider) return;
+
+  const simGuests = parseInt(guestsSlider.value, 10) || 1;
+  const simBudget = parseFloat(budgetSlider.value) || 0;
+
+  updateSimulationDisplay(simGuests, simBudget);
+}
+
+function updateSimulationDisplay(simGuests, simBudget) {
+  const currency = activeEvent?.summary?.currency || '$';
+  const activeBudget = activeEvent?.budget?.total || activeEvent?.summary?.budgetTotal || 0;
+
+  const guestsDisplay = document.getElementById('sim-guests-display');
+  const budgetDisplay = document.getElementById('sim-budget-display');
+  const costPerGuest = document.getElementById('sim-cost-per-guest');
+  const budgetDelta = document.getElementById('sim-budget-delta');
+
+  if (guestsDisplay) {
+    guestsDisplay.textContent = `${formatNumber(simGuests)} Guests`;
+  }
+
+  if (budgetDisplay) {
+    budgetDisplay.textContent = `${currency}${formatNumber(simBudget)}`;
+  }
+
+  if (costPerGuest) {
+    const cpg = simGuests > 0 ? simBudget / simGuests : 0;
+    costPerGuest.textContent = `${currency}${cpg.toFixed(2)}`;
+  }
+
+  if (budgetDelta) {
+    const delta = simBudget - activeBudget;
+    if (delta > 0) {
+      budgetDelta.textContent = `+${currency}${formatNumber(delta)}`;
+      budgetDelta.style.color = 'var(--warning)';
+    } else if (delta < 0) {
+      budgetDelta.textContent = `-${currency}${formatNumber(Math.abs(delta))}`;
+      budgetDelta.style.color = 'var(--success)';
+    } else {
+      budgetDelta.textContent = `${currency}0`;
+      budgetDelta.style.color = 'var(--text-main)';
+    }
+  }
+}
+
+function applySimulationToPlan() {
+  if (!activeEvent) return;
+  const guestsSlider = document.getElementById('sim-guests');
+  const budgetSlider = document.getElementById('sim-budget');
+  if (!guestsSlider || !budgetSlider) return;
+
+  const newGuests = parseInt(guestsSlider.value, 10);
+  const newBudget = parseFloat(budgetSlider.value);
+  const oldBudget = activeEvent.budget?.total || activeEvent.summary?.budgetTotal || 1;
+
+  if (isNaN(newGuests) || newGuests <= 0 || isNaN(newBudget) || newBudget <= 0) return;
+
+  const scaleRatio = newBudget / oldBudget;
+
+  // Pro-rate category allocations
+  if (activeEvent.budget?.categories?.length) {
+    activeEvent.budget.categories.forEach((cat) => {
+      cat.allocated = Math.round((cat.allocated || 0) * scaleRatio);
+      if (cat.spent) {
+        cat.spent = Math.round(cat.spent * scaleRatio);
+      }
+    });
+  }
+
+  activeEvent.summary.guestCount = newGuests;
+  activeEvent.summary.budgetTotal = newBudget;
+  if (activeEvent.budget) {
+    activeEvent.budget.total = newBudget;
+  }
+
+  saveEventsToStorage();
+  renderApp();
+  showToast('Simulation applied: Budget and guest metrics updated!');
 }
 
 // TAB 3: Timeline & Run of Show
@@ -618,12 +807,14 @@ function initEventListeners() {
   }
 
   // Copy Invitation
-  document.getElementById('btn-copy-invite').addEventListener('click', () => {
-    const invite = activeEvent?.personalizedIdeas?.invitationCopy || {};
-    const text = `${invite.headline || ''}\n\n${invite.opening || ''}\n\n${invite.details || ''}\n\n${invite.rsvpNote || ''}\n${invite.dressCodeAdvice ? `Dress code: ${invite.dressCodeAdvice}` : ''}`;
-    navigator.clipboard.writeText(text);
-    showToast('Invitation copy copied to clipboard!');
-  });
+  const copyInviteBtn = document.getElementById('btn-copy-invite');
+  if (copyInviteBtn) {
+    copyInviteBtn.addEventListener('click', () => {
+      const invite = activeEvent?.personalizedIdeas?.invitationCopy || {};
+      const text = `${invite.headline || ''}\n\n${invite.opening || ''}\n\n${invite.details || ''}\n\n${invite.rsvpNote || ''}\n${invite.dressCodeAdvice ? `Dress code: ${invite.dressCodeAdvice}` : ''}`;
+      copyWithFeedback(copyInviteBtn, text, 'Invitation copy copied to clipboard!');
+    });
+  }
 
   // AI Speech Generator Form
   document.getElementById('form-speech-generator').addEventListener('submit', async (e) => {
@@ -655,11 +846,13 @@ function initEventListeners() {
   });
 
   // Copy Speech
-  document.getElementById('btn-copy-speech').addEventListener('click', () => {
-    const speechText = document.getElementById('speech-text').textContent;
-    navigator.clipboard.writeText(speechText);
-    showToast('Speech copied to clipboard!');
-  });
+  const copySpeechBtn = document.getElementById('btn-copy-speech');
+  if (copySpeechBtn) {
+    copySpeechBtn.addEventListener('click', () => {
+      const speechText = document.getElementById('speech-text').textContent;
+      copyWithFeedback(copySpeechBtn, speechText, 'Speech copied to clipboard!');
+    });
+  }
 
   // AI Budget Optimizer Button
   document.getElementById('btn-ai-optimize-budget').addEventListener('click', async () => {
@@ -673,7 +866,7 @@ function initEventListeners() {
       // Switch to Copilot tab and trigger prompt
       document.querySelector('[data-tab="tab-copilot"]').click();
       await handleCopilotMessage(prompt);
-      showToast('Budget analysis generated in Celebrio Co-Pilot!');
+      showToast('Budget analysis generated in Celebo Co-Pilot!');
     } catch (err) {
       showToast('Budget analysis error: ' + err.message);
     } finally {
@@ -682,7 +875,7 @@ function initEventListeners() {
     }
   });
 
-  // Celebrio Co-Pilot Form
+  // Celebo Co-Pilot Form
   document.getElementById('copilot-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const input = document.getElementById('copilot-input');
@@ -1008,11 +1201,13 @@ function initModals() {
   });
 
   // Copy RFP
-  document.getElementById('btn-copy-rfp').addEventListener('click', () => {
-    const text = document.getElementById('rfp-result-text').value;
-    navigator.clipboard.writeText(text);
-    showToast('Inquiry letter copied to clipboard!');
-  });
+  const copyRfpBtn = document.getElementById('btn-copy-rfp');
+  if (copyRfpBtn) {
+    copyRfpBtn.addEventListener('click', () => {
+      const text = document.getElementById('rfp-result-text').value;
+      copyWithFeedback(copyRfpBtn, text, 'Inquiry letter copied to clipboard!');
+    });
+  }
 }
 
 function openVendorRFPModal(idx) {
@@ -1063,4 +1258,23 @@ function showToast(msg) {
     toast.style.transform = 'translateY(10px)';
     setTimeout(() => toast.remove(), 300);
   }, 3500);
+}
+
+function copyWithFeedback(buttonElement, textToCopy, successMessage, defaultLabel) {
+  if (!textToCopy) return;
+  navigator.clipboard
+    .writeText(textToCopy)
+    .then(() => {
+      if (buttonElement) {
+        const prevHtml = buttonElement.innerHTML;
+        buttonElement.innerHTML = '<span aria-hidden="true">✓</span> Copied!';
+        setTimeout(() => {
+          buttonElement.innerHTML = defaultLabel || prevHtml;
+        }, 1500);
+      }
+      showToast(successMessage);
+    })
+    .catch(() => {
+      showToast(successMessage);
+    });
 }

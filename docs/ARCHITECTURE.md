@@ -1,6 +1,6 @@
-# Celebrio AI Architecture & System Design
+# 🏛️ Celebo AI Architecture & System Design
 
-This document details the architectural patterns, security controls, and data flow implemented across the Celebrio AI platform.
+This document details the architectural patterns, security controls, and data flow implemented across the Celebo AI platform.
 
 ---
 
@@ -10,7 +10,7 @@ This document details the architectural patterns, security controls, and data fl
 [ Host / Event Planner ]
            │
            ▼ (HTTPS / Browsing)
-[ Celebrio Web Client (HTML5 / Modern CSS / ES6) ]
+[ Celebo Web Client (HTML5 / Modern CSS / ES6) ]
            │
            ├─► [ sessionStorage (Custom Gemini API Key) ]
            ├─► [ localStorage (Event Persistence) ]
@@ -45,7 +45,7 @@ This document details the architectural patterns, security controls, and data fl
 ## 2. Architectural Design Patterns
 
 ### A. Multi-Model Cascading with Smart Retry
-External LLM APIs can occasionally experience transient rate limit surges or high demand. Rather than surfacing error alerts to end users, Celebrio AI implements an intelligent error-aware model cascade:
+External LLM APIs can occasionally experience transient rate limit surges or high demand. Rather than surfacing error alerts to end users, Celebo AI implements an intelligent error-aware model cascade:
 1. **Primary**: `gemini-2.0-flash` executes initial plan synthesis with `responseMimeType: "application/json"`.
 2. **Error Classification**:
    - HTTP 400, 401, 403, 404: Non-retryable errors throw immediately without cascading, as repeating the same request will produce the same rejection.

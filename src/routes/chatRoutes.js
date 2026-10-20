@@ -39,7 +39,7 @@ router.post('/generate', async (req, res) => {
 
 /**
  * POST /api/chat
- * Multi-turn context-aware chat with Celebrio Co-Pilot.
+ * Multi-turn context-aware chat with Celebo Co-Pilot.
  */
 router.post('/chat', async (req, res) => {
   try {
@@ -62,17 +62,17 @@ CURRENT EVENT CONTEXT:
 `
       : 'No active event context.';
 
-    const systemInstruction = `You are Celebrio AI Co-Pilot, an expert event planning partner. ${contextSummary} Provide structured, actionable planning advice.`;
+    const systemInstruction = `You are Celebo AI Co-Pilot, an expert event planning partner. ${contextSummary} Provide structured, actionable planning advice.`;
 
     let conversationText = '';
     if (Array.isArray(history) && history.length > 0) {
       conversationText =
         history
           .slice(-6)
-          .map((h) => `${h.role === 'user' ? 'User' : 'Celebrio AI'}: ${sanitizeInput(h.text)}`)
+          .map((h) => `${h.role === 'user' ? 'User' : 'Celebo AI'}: ${sanitizeInput(h.text)}`)
           .join('\n\n') + '\n\n';
     }
-    conversationText += `User: ${sanitizeInput(message)}\nCelebrio AI:`;
+    conversationText += `User: ${sanitizeInput(message)}\nCelebo AI:`;
 
     const apiResult = await callGeminiAPI(
       conversationText,

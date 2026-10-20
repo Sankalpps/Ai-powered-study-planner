@@ -1,4 +1,4 @@
-// Pre-loaded Showcase Events for Celebrio AI
+// Pre-loaded Showcase Events for Celebo AI
 const SAMPLE_EVENTS = [
   {
     id: 'sample_wedding_01',

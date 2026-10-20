@@ -1,5 +1,5 @@
 /**
- * @fileoverview Celebrio AI - Primary Application Entrypoint
+ * @fileoverview Celebo AI - Primary Application Entrypoint
  * @module server
  */
 
@@ -88,7 +88,7 @@ app.validatePlanInput = validatePlanInput;
 // Start server only if run directly (clean testing imports)
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`Celebrio AI Server running at http://localhost:${PORT}`);
+    console.log(`Celebo AI Server running at http://localhost:${PORT}`);
   });
 }
 

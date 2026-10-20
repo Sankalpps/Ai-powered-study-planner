@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Celebrio AI — Intelligent GenAI Celebration & Event Planner</title>
-  <meta name="description" content="AI-powered planning director for weddings, birthdays, and community festivals with budgets, timelines, and vendor RFPs.">
+  <title>Celebo AI — Intelligent GenAI Celebration & Event Planner</title>
+  <meta name="description" content="Celebo AI: Autonomous event planning director for weddings, milestone birthdays, and community festivals with dynamic budgets, phased timelines, and vendor RFPs.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
 </head>
@@ -17,13 +17,15 @@
   <header class="app-header" role="banner">
     <div class="header-container">
       <div class="brand-section">
-        <span class="brand-logo" aria-hidden="true">✨</span>
+        <div class="brand-logo-glow" aria-hidden="true">
+          <span class="brand-logo">✨</span>
+        </div>
         <div>
           <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <h1 class="brand-title">Celebrio AI</h1>
-            <span class="brand-badge" aria-label="Powered by Google Gemini">Gemini Powered</span>
+            <h1 class="brand-title">Celebo AI</h1>
+            <span class="brand-badge" aria-label="Powered by Google Gemini">Gemini 2.0 Flash</span>
           </div>
-          <p style="font-size: 0.8rem; color: #cbd5e1; margin-top: 2px;">Celebration & Event Planning Co-Pilot</p>
+          <p class="brand-subtitle">Autonomous Event Architecture &amp; Intelligent Celebration Design</p>
         </div>
       </div>
 
@@ -37,13 +39,16 @@
 
       <!-- Header Actions -->
       <div class="header-actions">
-        <button id="btn-new-event" class="btn btn-primary" title="Create a new event plan using Gemini AI" aria-haspopup="dialog">
+        <button id="btn-toggle-theme" class="btn btn-secondary btn-sm" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+          <span aria-hidden="true">🌓</span> Theme
+        </button>
+        <button id="btn-new-event" class="btn btn-primary btn-sm" title="Create a new event plan using Gemini AI" aria-haspopup="dialog">
           <span aria-hidden="true">✨</span> New Event Wizard
         </button>
-        <button id="btn-export-pdf" class="btn btn-secondary" title="Export as clean printable Event Master Binder">
-          <span aria-hidden="true">🖨️</span> Export PDF / Print
+        <button id="btn-export-pdf" class="btn btn-secondary btn-sm" title="Export as clean printable Event Master Binder">
+          <span aria-hidden="true">🖨️</span> Export PDF
         </button>
-        <button id="btn-open-settings" class="btn btn-secondary" title="API Settings & Model Selection" aria-haspopup="dialog">
+        <button id="btn-open-settings" class="btn btn-secondary btn-sm" title="API Settings &amp; Model Selection" aria-haspopup="dialog">
           <span aria-hidden="true">⚙️</span> Settings
         </button>
       </div>
@@ -57,7 +62,10 @@
     <section class="event-hero-card" id="event-hero" aria-label="Active Event Summary">
       <div class="hero-content">
         <div class="hero-main">
-          <span class="hero-type-tag" id="hero-type" aria-label="Event Type">Wedding</span>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span class="hero-type-tag" id="hero-type" aria-label="Event Type">Wedding</span>
+            <span class="hero-verified-badge"><span aria-hidden="true">🛡️</span> AI Validated Schema</span>
+          </div>
           <h2 class="hero-title" id="hero-title">Loading Event Plan...</h2>
           <p class="hero-tagline" id="hero-tagline">Preparing your personalized celebration blueprint...</p>
           <div class="hero-meta-strip">
@@ -67,12 +75,14 @@
             <span class="meta-item"><span aria-hidden="true">💰</span> <strong id="hero-budget">$38,000 Total Budget</strong></span>
           </div>
         </div>
-        <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
-          <div style="background: var(--primary-light); padding: 0.5rem 1rem; border-radius: var(--radius-md); text-align: center;">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase;">Countdown</div>
-            <div id="hero-countdown" style="font-size: 1.5rem; font-weight: 800; color: var(--primary-hover);">-- Days</div>
+        <div class="hero-actions-col">
+          <div class="hero-countdown-box">
+            <div class="hero-countdown-lbl">Event Countdown</div>
+            <div id="hero-countdown" class="hero-countdown-val">-- Days</div>
           </div>
-          <button id="btn-edit-active-event" class="btn btn-outline btn-sm" aria-label="Edit Active Event Details">✏️ Edit Details</button>
+          <button id="btn-edit-active-event" class="btn btn-outline btn-sm" aria-label="Edit Active Event Details">
+            <span aria-hidden="true">✏️</span> Edit Details
+          </button>
         </div>
       </div>
     </section>
@@ -118,12 +128,24 @@
 
     <!-- Navigation Tabs -->
     <nav class="tabs-navigation" role="tablist" aria-label="Event Planning Modules">
-      <button class="tab-btn active" id="tab-btn-overview" role="tab" aria-selected="true" aria-controls="tab-overview" data-tab="tab-overview" tabindex="0">📋 Overview & Moodboard</button>
-      <button class="tab-btn" id="tab-btn-budget" role="tab" aria-selected="false" aria-controls="tab-budget" data-tab="tab-budget" tabindex="-1">💰 Budget & Expenses</button>
-      <button class="tab-btn" id="tab-btn-timeline" role="tab" aria-selected="false" aria-controls="tab-timeline" data-tab="tab-timeline" tabindex="-1">⏳ Milestones & Run of Show</button>
-      <button class="tab-btn" id="tab-btn-vendors" role="tab" aria-selected="false" aria-controls="tab-vendors" data-tab="tab-vendors" tabindex="-1">🤝 Vendor Hub</button>
-      <button class="tab-btn" id="tab-btn-creative" role="tab" aria-selected="false" aria-controls="tab-creative" data-tab="tab-creative" tabindex="-1">💡 Creative Studio (Speeches & Invites)</button>
-      <button class="tab-btn" id="tab-btn-copilot" role="tab" aria-selected="false" aria-controls="tab-copilot" data-tab="tab-copilot" tabindex="-1">🤖 Celebrio Co-Pilot</button>
+      <button class="tab-btn active" id="tab-btn-overview" role="tab" aria-selected="true" aria-controls="tab-overview" data-tab="tab-overview" tabindex="0">
+        <span aria-hidden="true">🎨</span> Overview &amp; Moodboard
+      </button>
+      <button class="tab-btn" id="tab-btn-budget" role="tab" aria-selected="false" aria-controls="tab-budget" data-tab="tab-budget" tabindex="-1">
+        <span aria-hidden="true">💰</span> Budget &amp; What-If
+      </button>
+      <button class="tab-btn" id="tab-btn-timeline" role="tab" aria-selected="false" aria-controls="tab-timeline" data-tab="tab-timeline" tabindex="-1">
+        <span aria-hidden="true">⏳</span> Milestones &amp; Run of Show
+      </button>
+      <button class="tab-btn" id="tab-btn-vendors" role="tab" aria-selected="false" aria-controls="tab-vendors" data-tab="tab-vendors" tabindex="-1">
+        <span aria-hidden="true">🤝</span> Vendor Hub
+      </button>
+      <button class="tab-btn" id="tab-btn-creative" role="tab" aria-selected="false" aria-controls="tab-creative" data-tab="tab-creative" tabindex="-1">
+        <span aria-hidden="true">💡</span> Creative Studio
+      </button>
+      <button class="tab-btn" id="tab-btn-copilot" role="tab" aria-selected="false" aria-controls="tab-copilot" data-tab="tab-copilot" tabindex="-1">
+        <span aria-hidden="true">🤖</span> Celebo Co-Pilot
+      </button>
     </nav>
 
     <!-- TAB 1: OVERVIEW & MOODBOARD -->
@@ -132,15 +154,15 @@
         <!-- Aesthetic Concept -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">🎨 Theme & Mood Concept</h3>
+            <h3 class="card-title">🎨 Theme &amp; Mood Concept</h3>
             <span class="badge badge-inquired" id="overview-theme-concept-badge">Theme</span>
           </div>
           <p id="overview-theme-desc" style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1rem;">
             Loading theme concept...
           </p>
 
-          <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">
-            Harmonized Color Palette (Click to Copy Hex)
+          <h4 style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; letter-spacing: 0.04em;">
+            Harmonized Color Palette (Click Swatch to Copy Hex)
           </h4>
           <div class="palette-strip" id="overview-palette-container" role="region" aria-label="Color Palette Swatches">
             <!-- Rendered via JS -->
@@ -159,22 +181,30 @@
         <!-- Decor & Highlights -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">✨ Key Decor & Sensory Vision</h3>
+            <h3 class="card-title">✨ Key Decor &amp; Sensory Vision</h3>
           </div>
-          <p id="overview-vision-statement" style="font-size: 0.95rem; font-style: italic; color: var(--text-main); margin-bottom: 1.25rem; border-left: 3px solid var(--primary); padding-left: 0.85rem;">
+          <p id="overview-vision-statement" class="vision-quote">
             Loading vision...
           </p>
 
-          <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; letter-spacing: 0.04em;">
             Signature Decor Highlights
           </h4>
           <ul id="overview-decor-list" style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.9rem; color: var(--text-main); margin-bottom: 1.5rem;" aria-label="Decor Highlights List">
             <!-- Rendered via JS -->
           </ul>
 
-          <div style="background: var(--bg-card-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
-            <div style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem;">
-              🎵 Soundtrack & Music Vibe
+          <div class="music-vibe-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+              <div style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.04em;">
+                🎵 Soundtrack &amp; Music Vibe
+              </div>
+              <div class="equalizer-bars" aria-hidden="true">
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+              </div>
             </div>
             <div id="overview-music-vibe" style="font-size: 0.9rem; color: var(--text-main); font-weight: 500;">
               Music vibe description...
@@ -184,14 +214,56 @@
       </div>
     </section>
 
-    <!-- TAB 2: BUDGET & EXPENSES -->
+    <!-- TAB 2: BUDGET & EXPENSES + WHAT-IF SIMULATOR -->
     <section id="tab-budget" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-budget" tabindex="0">
+      
+      <!-- Live What-If Budget Simulator Drawer -->
+      <div class="card sim-card" id="sim-drawer">
+        <div class="card-header">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span class="sim-pill-badge">WHAT-IF SIMULATOR</span>
+            <h3 class="card-title">🎛️ Live Budget &amp; Guest Scale Simulator</h3>
+          </div>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Real-time allocation stress testing</span>
+        </div>
+        <div class="sim-grid">
+          <div class="sim-control-group">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+              <label for="sim-guests" class="form-label" style="margin: 0;">Simulated Guests</label>
+              <span id="sim-guests-display" class="sim-counter-badge">100 Guests</span>
+            </div>
+            <input type="range" id="sim-guests" class="sim-slider" min="10" max="1000" step="5" value="100" aria-label="Simulated guest count slider">
+          </div>
+          <div class="sim-control-group">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+              <label for="sim-budget" class="form-label" style="margin: 0;">Simulated Total Budget</label>
+              <span id="sim-budget-display" class="sim-counter-badge sim-counter-accent">$15,000</span>
+            </div>
+            <input type="range" id="sim-budget" class="sim-slider" min="1000" max="250000" step="500" value="15000" aria-label="Simulated total budget slider">
+          </div>
+        </div>
+        <div class="sim-metrics-strip">
+          <div class="sim-metric-item">
+            <span class="sim-metric-lbl">Est. Cost Per Guest:</span>
+            <strong id="sim-cost-per-guest" class="sim-metric-val">$150.00</strong>
+          </div>
+          <div class="sim-metric-item">
+            <span class="sim-metric-lbl">Delta vs Active Budget:</span>
+            <strong id="sim-budget-delta" class="sim-metric-val">$0</strong>
+          </div>
+          <button id="btn-apply-simulation" class="btn btn-accent btn-sm">
+            <span aria-hidden="true">⚡</span> Apply Simulation to Active Plan
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Budget Table Card -->
       <div class="card" style="margin-bottom: 1.5rem;">
         <div class="card-header">
           <div>
             <h3 class="card-title">💰 Dynamic Budget Allocation</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">
-              Calculated automatically based on event type, guest count, and tier.
+              Calculated automatically based on celebration type, guest count, and tier.
             </p>
           </div>
           <div style="display: flex; gap: 0.5rem;">
@@ -213,7 +285,7 @@
                 <th scope="col">Target Allocation</th>
                 <th scope="col">Actual Spent</th>
                 <th scope="col">Share</th>
-                <th scope="col">Notes & Money-Saving AI Tips</th>
+                <th scope="col">Notes &amp; Money-Saving AI Tips</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
@@ -250,10 +322,10 @@
             <div>
               <h3 class="card-title">⏱️ Day-Of Run of Show</h3>
               <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">
-                Minute-by-minute execution timeline for vendors, hosts, and leads.
+                Minute-by-minute execution timeline for vendors, hosts, and coordinators.
               </p>
             </div>
-            <button id="btn-add-run-item" class="btn btn-outline btn-sm">+ Add Cues</button>
+            <button id="btn-add-run-item" class="btn btn-outline btn-sm">+ Add Cue</button>
           </div>
           <div class="run-of-show-list" id="run-of-show-container" role="list" aria-label="Run of Show Cues">
             <!-- Rendered via JS -->
@@ -267,9 +339,9 @@
       <div class="card" style="margin-bottom: 1.5rem;">
         <div class="card-header">
           <div>
-            <h3 class="card-title">🤝 Vendor & Partner Directory</h3>
+            <h3 class="card-title">🤝 Vendor &amp; Partner Directory</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">
-              Track contracts, deposits, status, and generate AI inquiry emails.
+              Track contracts, deliverables, status, and draft AI inquiry emails.
             </p>
           </div>
           <button id="btn-add-vendor" class="btn btn-primary btn-sm">+ Add Vendor</button>
@@ -287,11 +359,11 @@
         <!-- AI Speech & Toast Generator -->
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">🎤 AI Speech & Toast Creator</h3>
+            <h3 class="card-title">🎤 AI Speech &amp; Toast Creator</h3>
             <span class="brand-badge" aria-label="Gemini Model">Gemini</span>
           </div>
           <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
-            Draft heartfelt, hilarious, or inspiring toasts with pacing cues in seconds.
+            Draft heartfelt, witty, or inspiring speeches with custom pacing cues in seconds.
           </p>
 
           <form id="form-speech-generator" aria-label="Speech Generator Form">
@@ -301,7 +373,7 @@
                 <select id="speech-type" class="form-select">
                   <option value="best_man">Best Man Toast</option>
                   <option value="maid_of_honor">Maid of Honor Speech</option>
-                  <option value="birthday_host">Birthday Welcome & Toast</option>
+                  <option value="birthday_host">Birthday Welcome &amp; Toast</option>
                   <option value="welcome_speech">Host Welcome Address</option>
                   <option value="community_keynote">Community Gala Keynote</option>
                   <option value="vows">Personal Vows</option>
@@ -310,10 +382,10 @@
               <div class="form-group">
                 <label for="speech-tone" class="form-label">Desired Tone</label>
                 <select id="speech-tone" class="form-select">
-                  <option value="heartfelt and sentimental">Heartfelt & Sentimental</option>
-                  <option value="hilarious and roast-style">Witty, Funny & Light Roast</option>
-                  <option value="warm, poetic, and romantic">Poetic & Romantic</option>
-                  <option value="inspiring and uplifting">Inspiring & Uplifting</option>
+                  <option value="heartfelt and sentimental">Heartfelt &amp; Sentimental</option>
+                  <option value="hilarious and roast-style">Witty, Funny &amp; Light Roast</option>
+                  <option value="warm, poetic, and romantic">Poetic &amp; Romantic</option>
+                  <option value="inspiring and uplifting">Inspiring &amp; Uplifting</option>
                 </select>
               </div>
             </div>
@@ -345,7 +417,7 @@
               <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Generated Speech</span>
               <button id="btn-copy-speech" class="btn btn-outline btn-sm" aria-label="Copy Generated Speech">📋 Copy to Clipboard</button>
             </div>
-            <div id="speech-text" style="background: var(--bg-card-subtle); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border); font-size: 0.95rem; line-height: 1.6; max-height: 320px; overflow-y: auto; white-space: pre-wrap;" tabindex="0"></div>
+            <div id="speech-text" class="speech-output-box" tabindex="0"></div>
           </div>
         </div>
 
@@ -353,27 +425,27 @@
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">💌 Invitation Suite Copy</h3>
-            <button id="btn-copy-invite" class="btn btn-outline btn-sm" aria-label="Copy Invitation Suite Copy">📋 Copy Card Copy</button>
+            <button id="btn-copy-invite" class="btn btn-outline btn-sm" aria-label="Copy Invitation Suite Copy">📋 Copy Invitation</button>
           </div>
-          <div id="invite-preview-card" style="background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border: 1px solid #fed7aa; border-radius: var(--radius-md); padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;" aria-label="Invitation Preview Card">
-            <div id="invite-headline" style="font-size: 1.15rem; font-weight: 800; color: #9a3412; letter-spacing: 0.05em; margin-bottom: 0.5rem; text-transform: uppercase;">
+          <div id="invite-preview-card" class="invite-preview-box" aria-label="Invitation Preview Card">
+            <div id="invite-headline" class="invite-headline">
               Headline Loading...
             </div>
-            <p id="invite-opening" style="font-size: 0.95rem; color: #c2410c; margin-bottom: 0.85rem; font-style: italic;">
+            <p id="invite-opening" class="invite-opening">
               Opening loading...
             </p>
-            <p id="invite-details" style="font-size: 0.92rem; color: #7c2d12; margin-bottom: 0.85rem; font-weight: 500;">
+            <p id="invite-details" class="invite-details">
               Details loading...
             </p>
-            <div id="invite-rsvp" style="font-size: 0.88rem; color: #9a3412; font-weight: 600; border-top: 1px dashed #fdba74; padding-top: 0.75rem;">
+            <div id="invite-rsvp" class="invite-rsvp">
               RSVP info...
             </div>
-            <div id="invite-dress-code" style="font-size: 0.82rem; color: #b45309; margin-top: 0.35rem;">
+            <div id="invite-dress-code" class="invite-dress-code">
               Dress Code Advice...
             </div>
           </div>
 
-          <h3 class="card-title" style="margin-bottom: 0.85rem;">🎉 Signature Games & Activities</h3>
+          <h3 class="card-title" style="margin-bottom: 0.85rem;">🎉 Signature Games &amp; Activities</h3>
           <div id="activities-container" style="display: flex; flex-direction: column; gap: 0.85rem;" role="region" aria-label="Signature Activities List">
             <!-- Rendered via JS -->
           </div>
@@ -381,13 +453,13 @@
       </div>
     </section>
 
-    <!-- TAB 6: CELEBRIO CO-PILOT AI -->
+    <!-- TAB 6: CELEBO CO-PILOT AI -->
     <section id="tab-copilot" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-copilot" tabindex="0">
-      <div class="copilot-container" aria-label="Celebrio Co-Pilot Chat Interface">
+      <div class="copilot-container" aria-label="Celebo Co-Pilot Chat Interface">
         <!-- Chat History -->
         <div class="copilot-messages" id="copilot-messages" role="log" aria-live="polite" aria-relevant="additions">
           <div class="chat-bubble chat-bubble-ai">
-            👋 <strong>Welcome to Celebrio Co-Pilot!</strong> I'm your dedicated GenAI event director. I have full context of your event plan. Ask me to refine schedules, negotiate vendor quotes, optimize budget allocations, suggest emergency contingency plans, or generate customized games!
+            👋 <strong>Welcome to Celebo Co-Pilot!</strong> I'm your dedicated GenAI event director. I have full context of your event plan. Ask me to refine schedules, negotiate vendor quotes, optimize budget allocations, suggest emergency contingency plans, or generate customized games!
           </div>
         </div>
 
@@ -403,7 +475,7 @@
         <!-- Input Row -->
         <form id="copilot-form" class="chat-input-row" aria-label="Chat input form">
           <label for="copilot-input" class="sr-only" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0);">Chat message</label>
-          <input type="text" id="copilot-input" class="chat-input" placeholder="Ask Celebrio AI anything about your event plan..." autocomplete="off" required aria-required="true">
+          <input type="text" id="copilot-input" class="chat-input" placeholder="Ask Celebo AI anything about your event plan..." autocomplete="off" required aria-required="true">
           <button type="submit" id="btn-copilot-send" class="btn btn-primary" aria-label="Send Message">
             <span>Send</span> <span aria-hidden="true">➔</span>
           </button>
@@ -438,7 +510,7 @@
         </div>
         <div class="form-group">
           <label for="wiz-event-title" class="form-label">Event Title</label>
-          <input type="text" id="wiz-event-title" class="form-input" placeholder="e.g. Maya & Alex's Coastal Wedding" required aria-required="true">
+          <input type="text" id="wiz-event-title" class="form-input" placeholder="e.g. Maya &amp; Alex's Coastal Wedding" required aria-required="true">
         </div>
       </div>
 
@@ -475,7 +547,7 @@
       </div>
 
       <div class="form-group">
-        <label for="wiz-vibe" class="form-label">Aesthetic Vibe & Style</label>
+        <label for="wiz-vibe" class="form-label">Aesthetic Vibe &amp; Style</label>
         <input type="text" id="wiz-vibe" class="form-input" placeholder="e.g. Boho chic with sunset oranges and acoustic folk, or Black-tie elegance" required aria-required="true">
       </div>
 
@@ -496,7 +568,7 @@
   <!-- MODAL: VENDOR INQUIRY / RFP GENERATOR -->
   <dialog id="modal-rfp" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="modal-rfp-title">
     <div class="modal-header">
-      <h3 class="modal-title" id="modal-rfp-title">✉️ AI Vendor Inquiry & RFP Generator</h3>
+      <h3 class="modal-title" id="modal-rfp-title">✉️ AI Vendor Inquiry &amp; RFP Generator</h3>
       <button class="modal-close-btn" data-close-modal="modal-rfp" aria-label="Close RFP Dialog">&times;</button>
     </div>
     <form id="form-rfp" aria-label="Vendor RFP Form">
@@ -534,7 +606,7 @@
   <!-- MODAL: SETTINGS & MODEL SELECTION -->
   <dialog id="modal-settings" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
     <div class="modal-header">
-      <h3 class="modal-title" id="modal-settings-title">⚙️ Settings & Gemini Configuration</h3>
+      <h3 class="modal-title" id="modal-settings-title">⚙️ Settings &amp; Gemini Configuration</h3>
       <button class="modal-close-btn" data-close-modal="modal-settings" aria-label="Close Settings Dialog">&times;</button>
     </div>
     <form id="form-settings" aria-label="Settings Form">
