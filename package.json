@@ -1,0 +1,27 @@
+{
+  "name": "celebrate-ai",
+  "version": "1.0.0",
+  "description": "Celebrio AI - Intelligent GenAI-Powered Celebration & Event Planner for Weddings, Birthdays, and Community Events",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node --test test/*.test.js",
+    "test:coverage": "node --test --experimental-test-coverage test/*.test.js",
+    "lint": "eslint src/ server.js",
+    "format": "prettier --check src/ server.js public/js/",
+    "format:fix": "prettier --write src/ server.js public/js/"
+  },
+  "dependencies": {
+    "compression": "^1.8.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^10.13.0",
+    "prettier": "^3.9.10"
+  }
+}
