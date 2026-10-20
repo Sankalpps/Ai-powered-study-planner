@@ -62,7 +62,7 @@ test('Cascade: 429 Rate Limit triggers 1 retry on same model then cascades', asy
     // The first model was tried twice (attempt 0, then attempt 1), then cascaded to fallback model
     assert.equal(attemptedModels[0], 'gemini-2.0-flash');
     assert.equal(attemptedModels[1], 'gemini-2.0-flash');
-    assert.equal(attemptedModels[2], 'gemini-2.0-flash-lite');
+    assert.equal(attemptedModels[2], 'gemini-3.5-flash-lite');
   } finally {
     global.fetch = originalFetch;
   }
@@ -96,7 +96,7 @@ test('Cascade: AbortError timeout cascades to next model', async () => {
     const result = await callGeminiAPI('Test prompt', '', 'gemini-2.0-flash', 'fake-key');
     assert.equal(result.text, 'Cascaded model response');
     assert.equal(attemptedModels[0], 'gemini-2.0-flash');
-    assert.equal(attemptedModels[1], 'gemini-2.0-flash-lite');
+    assert.equal(attemptedModels[1], 'gemini-3.5-flash-lite');
   } finally {
     global.fetch = originalFetch;
   }

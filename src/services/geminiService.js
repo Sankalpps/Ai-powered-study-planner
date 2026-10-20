@@ -55,7 +55,7 @@ async function callGeminiAPI(
   }
 
   // Model cascade: primary first, followed by fallbacks
-  const modelsToTry = [requestedModel || DEFAULT_MODEL, FALLBACK_MODEL, 'gemini-1.5-flash'];
+  const modelsToTry = [requestedModel || DEFAULT_MODEL, FALLBACK_MODEL, 'gemini-3.5-flash'];
   const uniqueModels = [...new Set(modelsToTry)];
 
   let lastError = null;
