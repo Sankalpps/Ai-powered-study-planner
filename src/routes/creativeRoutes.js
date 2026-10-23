@@ -7,7 +7,8 @@ const express = require('express');
 const router = express.Router();
 const { sanitizeInput } = require('../middleware/validator');
 const { callGeminiAPI } = require('../services/geminiService');
-const { getCacheKey, getFromCache, setInCache } = require('../services/cacheService');
+const { getCacheKey } = require('../services/cacheService');
+const { sendErrorResponse, handleCachedGeneration } = require('../utils/routeHelpers');
 
 /**
  * POST /api/generate-speech
@@ -37,31 +38,26 @@ router.post('/generate-speech', async (req, res) => {
       keyMemories,
       durationMinutes
     });
-    const cached = getFromCache(cacheKey);
-    if (cached) {
-      return res.json({ ...cached, fromCache: true });
-    }
 
-    const systemInstruction =
-      'You are an elite speechwriter. Write captivating, emotionally resonant speeches with delivery cues in [brackets].';
-    const prompt = `Write a ${durationMinutes}-minute ${speechType.replace(/_/g, ' ')}:
+    await handleCachedGeneration(res, cacheKey, async () => {
+      const systemInstruction =
+        'You are an elite speechwriter. Write captivating, emotionally resonant speeches with delivery cues in [brackets].';
+      const prompt = `Write a ${durationMinutes}-minute ${speechType.replace(/_/g, ' ')}:
 - Speaker: ${sanitizeInput(speakerName)}
 - Honoree: ${sanitizeInput(honoreeName)}
 - Relationship: ${sanitizeInput(relationship)}
 - Tone: ${sanitizeInput(tone)}
 - Memories: ${sanitizeInput(keyMemories)}`;
 
-    const apiResult = await callGeminiAPI(prompt, systemInstruction, requestedModel, customKey);
-    const payload = {
-      success: true,
-      speech: apiResult.text,
-      modelUsed: apiResult.modelUsed
-    };
-
-    setInCache(cacheKey, payload);
-    res.json(payload);
+      const apiResult = await callGeminiAPI(prompt, systemInstruction, requestedModel, customKey);
+      return {
+        success: true,
+        speech: apiResult.text,
+        modelUsed: apiResult.modelUsed
+      };
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message || 'Speech generation failed' });
+    sendErrorResponse(res, 500, err.message || 'Speech generation failed');
   }
 });
 
@@ -89,31 +85,26 @@ router.post('/generate-vendor-rfp', async (req, res) => {
       budgetRange,
       specificQuestions
     });
-    const cached = getFromCache(cacheKey);
-    if (cached) {
-      return res.json({ ...cached, fromCache: true });
-    }
 
-    const systemInstruction =
-      'You are a professional luxury event coordinator. Draft polite, structured vendor inquiry emails and RFPs.';
-    const prompt = `Draft a vendor inquiry email:
+    await handleCachedGeneration(res, cacheKey, async () => {
+      const systemInstruction =
+        'You are a professional luxury event coordinator. Draft polite, structured vendor inquiry emails and RFPs.';
+      const prompt = `Draft a vendor inquiry email:
 - Category: ${sanitizeInput(vendorCategory)}
 - Name: ${sanitizeInput(vendorName)}
 - Event Details: ${sanitizeInput(eventDetails)}
 - Target Budget: ${sanitizeInput(budgetRange)}
 - Inquiries: ${sanitizeInput(specificQuestions)}`;
 
-    const apiResult = await callGeminiAPI(prompt, systemInstruction, requestedModel, customKey);
-    const payload = {
-      success: true,
-      inquiry: apiResult.text,
-      modelUsed: apiResult.modelUsed
-    };
-
-    setInCache(cacheKey, payload);
-    res.json(payload);
+      const apiResult = await callGeminiAPI(prompt, systemInstruction, requestedModel, customKey);
+      return {
+        success: true,
+        inquiry: apiResult.text,
+        modelUsed: apiResult.modelUsed
+      };
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message || 'Vendor RFP generation failed' });
+    sendErrorResponse(res, 500, err.message || 'Vendor RFP generation failed');
   }
 });
 

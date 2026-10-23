@@ -19,9 +19,9 @@ test('validatePlanOutput: Rejects missing required top-level keys', () => {
   const incomplete = { summary: { guestCount: 50, budgetTotal: 5000 } };
   const result = validatePlanOutput(incomplete);
   assert.equal(result.valid, false);
-  assert.ok(result.errors.some(e => e.includes('theme')));
-  assert.ok(result.errors.some(e => e.includes('budget')));
-  assert.ok(result.errors.some(e => e.includes('timelineMilestones')));
+  assert.ok(result.errors.some((e) => e.includes('theme')));
+  assert.ok(result.errors.some((e) => e.includes('budget')));
+  assert.ok(result.errors.some((e) => e.includes('timelineMilestones')));
 });
 
 test('validatePlanOutput: Flags budget category sum mismatch > 10%', () => {
@@ -42,7 +42,10 @@ test('validatePlanOutput: Flags budget category sum mismatch > 10%', () => {
   const result = validatePlanOutput(mismatchedPlan);
   assert.equal(result.valid, false);
   assert.ok(result.errors.length > 0);
-  assert.ok(result.errors.some(e => e.includes('10%')), `Expected 10% error, got: ${JSON.stringify(result.errors)}`);
+  assert.ok(
+    result.errors.some((e) => e.includes('10%')),
+    `Expected 10% error, got: ${JSON.stringify(result.errors)}`
+  );
 });
 
 test('escapeHTML: Escapes dangerous HTML characters', () => {
@@ -77,7 +80,9 @@ test('validatePlanInput: Rejects specialNotes exceeding 500 characters', () => {
     }
   };
   let nextCalled = false;
-  validatePlanInput(req, res, () => { nextCalled = true; });
+  validatePlanInput(req, res, () => {
+    nextCalled = true;
+  });
 
   assert.equal(statusCode, 400);
   assert.ok(responseData.error.includes('Special notes exceeds maximum allowed length'));
@@ -104,7 +109,9 @@ test('validatePlanInput: Rejects location exceeding 200 characters', () => {
     }
   };
   let nextCalled = false;
-  validatePlanInput(req, res, () => { nextCalled = true; });
+  validatePlanInput(req, res, () => {
+    nextCalled = true;
+  });
 
   assert.equal(statusCode, 400);
   assert.ok(responseData.error.includes('Location exceeds maximum allowed length'));
@@ -131,7 +138,9 @@ test('validatePlanInput: Rejects themeVibe exceeding 200 characters', () => {
     }
   };
   let nextCalled = false;
-  validatePlanInput(req, res, () => { nextCalled = true; });
+  validatePlanInput(req, res, () => {
+    nextCalled = true;
+  });
 
   assert.equal(statusCode, 400);
   assert.ok(responseData.error.includes('Theme/vibe exceeds maximum allowed length'));
@@ -152,12 +161,12 @@ test('validatePlanInput: Passes valid text and sanitizes inputs properly', () =>
   };
   const res = {};
   let nextCalled = false;
-  validatePlanInput(req, res, () => { nextCalled = true; });
+  validatePlanInput(req, res, () => {
+    nextCalled = true;
+  });
 
   assert.equal(nextCalled, true);
   assert.equal(req.body.guestCount, 150);
   assert.equal(req.body.budgetTotal, 25000);
   assert.equal(req.body.specialNotes, 'No peanuts');
 });
-
-

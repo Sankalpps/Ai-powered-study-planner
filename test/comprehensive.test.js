@@ -3,7 +3,12 @@ const assert = require('node:assert/strict');
 const app = require('../server');
 const { cleanAndParseJSON, validatePlanOutput } = require('../src/services/geminiService');
 const { escapeHTML, sanitizeInput } = require('../src/middleware/validator');
-const { getCacheKey, getFromCache, setInCache, responseCache } = require('../src/services/cacheService');
+const {
+  getCacheKey,
+  getFromCache,
+  setInCache,
+  responseCache
+} = require('../src/services/cacheService');
 
 // ─── cleanAndParseJSON edge cases ────────────────────────────────────────────
 
@@ -53,7 +58,7 @@ test('Validator: Reports non-number guestCount', () => {
   };
   const result = validatePlanOutput(plan);
   assert.equal(result.valid, false);
-  assert.ok(result.errors.some(e => e.includes('guestCount must be a number')));
+  assert.ok(result.errors.some((e) => e.includes('guestCount must be a number')));
 });
 
 test('Validator: Reports non-number budgetTotal in summary', () => {
@@ -68,7 +73,7 @@ test('Validator: Reports non-number budgetTotal in summary', () => {
   };
   const result = validatePlanOutput(plan);
   assert.equal(result.valid, false);
-  assert.ok(result.errors.some(e => e.includes('budgetTotal must be a number')));
+  assert.ok(result.errors.some((e) => e.includes('budgetTotal must be a number')));
 });
 
 test('Validator: Reports non-number budget.total', () => {
@@ -83,7 +88,7 @@ test('Validator: Reports non-number budget.total', () => {
   };
   const result = validatePlanOutput(plan);
   assert.equal(result.valid, false);
-  assert.ok(result.errors.some(e => e.includes('budget.total must be a number')));
+  assert.ok(result.errors.some((e) => e.includes('budget.total must be a number')));
 });
 
 test('Validator: Reports empty categories array', () => {
@@ -98,7 +103,7 @@ test('Validator: Reports empty categories array', () => {
   };
   const result = validatePlanOutput(plan);
   assert.equal(result.valid, false);
-  assert.ok(result.errors.some(e => e.includes('non-empty array')));
+  assert.ok(result.errors.some((e) => e.includes('non-empty array')));
 });
 
 test('Validator: Reports category with non-string name', () => {
@@ -113,7 +118,7 @@ test('Validator: Reports category with non-string name', () => {
   };
   const result = validatePlanOutput(plan);
   assert.equal(result.valid, false);
-  assert.ok(result.errors.some(e => e.includes('name must be a string')));
+  assert.ok(result.errors.some((e) => e.includes('name must be a string')));
 });
 
 test('Validator: Reports category with non-number allocated', () => {
@@ -128,17 +133,20 @@ test('Validator: Reports category with non-number allocated', () => {
   };
   const result = validatePlanOutput(plan);
   assert.equal(result.valid, false);
-  assert.ok(result.errors.some(e => e.includes('allocated must be a number')));
+  assert.ok(result.errors.some((e) => e.includes('allocated must be a number')));
 });
 
 test('Validator: Passes when categories sum within 10% of total', () => {
   const plan = {
     summary: { guestCount: 100, budgetTotal: 10000 },
     theme: {},
-    budget: { total: 10000, categories: [
-      { name: 'A', allocated: 5000 },
-      { name: 'B', allocated: 4500 }
-    ]},
+    budget: {
+      total: 10000,
+      categories: [
+        { name: 'A', allocated: 5000 },
+        { name: 'B', allocated: 4500 }
+      ]
+    },
     timelineMilestones: [],
     runOfShow: [],
     vendors: [],

@@ -16,12 +16,9 @@ test('Cascade: 400 Bad Request throws immediately without retrying/cascading', a
   };
 
   try {
-    await assert.rejects(
-      async () => {
-        await callGeminiAPI('Test prompt', '', 'gemini-2.0-flash', 'fake-key');
-      },
-      /Upstream model error \(400\)/
-    );
+    await assert.rejects(async () => {
+      await callGeminiAPI('Test prompt', '', 'gemini-2.0-flash', 'fake-key');
+    }, /Upstream model error \(400\)/);
     // Crucial: 400 is NON_RETRYABLE, so exactly 1 call was made
     assert.equal(callCount, 1);
   } finally {
@@ -113,13 +110,31 @@ test('generatePlanWithRetry: Performs automatic repair retry when initial JSON f
 
   // 2nd response (repair retry) is complete and valid
   const validPlanJSON = JSON.stringify({
-    summary: { title: 'Repaired Gala', guestCount: 100, budgetTotal: 10000, currency: '$', eventType: 'celebration' },
+    summary: {
+      title: 'Repaired Gala',
+      guestCount: 100,
+      budgetTotal: 10000,
+      currency: '$',
+      eventType: 'celebration'
+    },
     theme: { conceptName: 'Gold' },
     budget: { total: 10000, categories: [{ name: 'Venue', allocated: 10000 }] },
-    timelineMilestones: [{ id: 'm1', timeframe: '1 month', phase: 'Prep', task: 'Book', priority: 'High', done: false }],
+    timelineMilestones: [
+      { id: 'm1', timeframe: '1 month', phase: 'Prep', task: 'Book', priority: 'High', done: false }
+    ],
     runOfShow: [{ time: '09:00 AM', activity: 'Start', lead: 'Host' }],
-    vendors: [{ id: 'v1', category: 'Venue', role: 'Host', estimatedCost: 10000, status: 'Contracted' }],
-    personalizedIdeas: { signatureActivities: [], invitationCopy: { headline: 'Welcome', opening: 'Join us', details: 'Venue', rsvpNote: 'RSVP' } }
+    vendors: [
+      { id: 'v1', category: 'Venue', role: 'Host', estimatedCost: 10000, status: 'Contracted' }
+    ],
+    personalizedIdeas: {
+      signatureActivities: [],
+      invitationCopy: {
+        headline: 'Welcome',
+        opening: 'Join us',
+        details: 'Venue',
+        rsvpNote: 'RSVP'
+      }
+    }
   });
 
   global.fetch = async (url, options) => {
@@ -138,7 +153,13 @@ test('generatePlanWithRetry: Performs automatic repair retry when initial JSON f
   };
 
   try {
-    const result = await generatePlanWithRetry('Generate plan', '', 'gemini-2.0-flash', 'fake-key', 10000);
+    const result = await generatePlanWithRetry(
+      'Generate plan',
+      '',
+      'gemini-2.0-flash',
+      'fake-key',
+      10000
+    );
     assert.equal(result.repaired, true);
     assert.equal(result.data.summary.title, 'Repaired Gala');
     assert.equal(attempts, 2);
@@ -157,7 +178,13 @@ test('Creative Routes: POST /api/generate-speech returns generated speech', asyn
       ok: true,
       status: 200,
       json: async () => ({
-        candidates: [{ content: { parts: [{ text: 'Here is your heartfelt speech with [pause] delivery cues.' }] } }]
+        candidates: [
+          {
+            content: {
+              parts: [{ text: 'Here is your heartfelt speech with [pause] delivery cues.' }]
+            }
+          }
+        ]
       })
     };
   };
@@ -195,7 +222,17 @@ test('Creative Routes: POST /api/generate-vendor-rfp returns drafted RFP inquiry
       ok: true,
       status: 200,
       json: async () => ({
-        candidates: [{ content: { parts: [{ text: 'Dear Vendor, We would love to request a quote for our upcoming celebration...' }] } }]
+        candidates: [
+          {
+            content: {
+              parts: [
+                {
+                  text: 'Dear Vendor, We would love to request a quote for our upcoming celebration...'
+                }
+              ]
+            }
+          }
+        ]
       })
     };
   };
@@ -224,13 +261,38 @@ test('Creative Routes: POST /api/generate-vendor-rfp returns drafted RFP inquiry
 test('Plan Routes: POST /api/generate-plan end-to-end plan generation with mock', async () => {
   const originalFetch = global.fetch;
   const mockPlan = {
-    summary: { title: 'Tuscan Night', guestCount: 50, budgetTotal: 5000, currency: '$', eventType: 'wedding' },
+    summary: {
+      title: 'Tuscan Night',
+      guestCount: 50,
+      budgetTotal: 5000,
+      currency: '$',
+      eventType: 'wedding'
+    },
     theme: { conceptName: 'Tuscan' },
     budget: { total: 5000, categories: [{ name: 'Venue', allocated: 5000 }] },
-    timelineMilestones: [{ id: 'm1', timeframe: '6 months', phase: 'Planning', task: 'Book', priority: 'High', done: false }],
+    timelineMilestones: [
+      {
+        id: 'm1',
+        timeframe: '6 months',
+        phase: 'Planning',
+        task: 'Book',
+        priority: 'High',
+        done: false
+      }
+    ],
     runOfShow: [{ time: '10:00 AM', activity: 'Arrival', lead: 'Host' }],
-    vendors: [{ id: 'v1', category: 'Venue', role: 'Host', estimatedCost: 5000, status: 'Contracted' }],
-    personalizedIdeas: { signatureActivities: [], invitationCopy: { headline: 'Join us', opening: 'Cordially', details: 'Details', rsvpNote: 'RSVP' } }
+    vendors: [
+      { id: 'v1', category: 'Venue', role: 'Host', estimatedCost: 5000, status: 'Contracted' }
+    ],
+    personalizedIdeas: {
+      signatureActivities: [],
+      invitationCopy: {
+        headline: 'Join us',
+        opening: 'Cordially',
+        details: 'Details',
+        rsvpNote: 'RSVP'
+      }
+    }
   };
 
   global.fetch = async (url, opts) => {

@@ -8,7 +8,7 @@ test('Security: CORS and Rate Limiter headers exist with Origin', async () => {
 
   try {
     const res = await fetch(`http://localhost:${port}/api/health`, {
-      headers: { 'Origin': 'http://example.com' }
+      headers: { Origin: 'http://example.com' }
     });
     assert.equal(res.status, 200);
     assert.ok(res.headers.get('ratelimit-limit'), 'Expected ratelimit-limit header');

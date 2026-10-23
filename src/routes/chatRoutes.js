@@ -7,7 +7,8 @@ const express = require('express');
 const router = express.Router();
 const { sanitizeInput } = require('../middleware/validator');
 const { callGeminiAPI } = require('../services/geminiService');
-const { getCacheKey, getFromCache, setInCache } = require('../services/cacheService');
+const { getCacheKey } = require('../services/cacheService');
+const { sendErrorResponse, handleCachedGeneration } = require('../utils/routeHelpers');
 
 /**
  * POST /api/generate
@@ -19,21 +20,17 @@ router.post('/generate', async (req, res) => {
     const customKey = req.headers['x-custom-api-key'] || null;
 
     if (!prompt || typeof prompt !== 'string' || !prompt.trim()) {
-      return res.status(400).json({ error: 'Prompt is required and must be a non-empty string.' });
+      return sendErrorResponse(res, 400, 'Prompt is required and must be a non-empty string.');
     }
 
     const sanitizedPrompt = sanitizeInput(prompt);
     const cacheKey = getCacheKey('gen', { prompt: sanitizedPrompt, systemInstruction, model });
-    const cached = getFromCache(cacheKey);
-    if (cached) {
-      return res.json({ ...cached, fromCache: true });
-    }
 
-    const result = await callGeminiAPI(sanitizedPrompt, systemInstruction, model, customKey);
-    setInCache(cacheKey, result);
-    res.json(result);
+    await handleCachedGeneration(res, cacheKey, async () => {
+      return await callGeminiAPI(sanitizedPrompt, systemInstruction, model, customKey);
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message || 'Generation failed' });
+    sendErrorResponse(res, 500, err.message || 'Generation failed');
   }
 });
 
@@ -48,7 +45,7 @@ router.post('/chat', async (req, res) => {
     const requestedModel = req.body.model || null;
 
     if (!message || typeof message !== 'string' || !message.trim()) {
-      return res.status(400).json({ error: 'Message is required.' });
+      return sendErrorResponse(res, 400, 'Message is required.');
     }
 
     const contextSummary = eventContext
@@ -86,7 +83,7 @@ CURRENT EVENT CONTEXT:
       modelUsed: apiResult.modelUsed
     });
   } catch (err) {
-    res.status(500).json({ error: err.message || 'Chat error' });
+    sendErrorResponse(res, 500, err.message || 'Chat error');
   }
 });
 

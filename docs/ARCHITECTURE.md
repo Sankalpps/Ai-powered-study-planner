@@ -79,3 +79,30 @@ External LLM APIs can occasionally experience transient rate limit surges or hig
 - Automatic **Dark Mode** via `@media (prefers-color-scheme: dark)`.
 - **Reduced Motion** accessibility via `@media (prefers-reduced-motion: reduce)`.
 - High-contrast color palette achieving contrast ratios `>= 4.5:1` against light and dark backgrounds.
+
+---
+
+## 3. Modular System Decomposition
+
+### A. Frontend Layer (`public/js/`)
+To achieve high maintainability without introducing bundling overhead or breaking zero-build deployment, the monolithic frontend was decomposed into single-responsibility browser modules loaded sequentially in `public/index.html`:
+- **`state.js`**: Global event plan models, active selection pointer, chat history, and bidirectional `localStorage` sync.
+- **`ui-utils.js`**: Formatting functions (`formatDate`, `formatNumber`, `calculateDaysRemaining`), accessible toast manager, clipboard feedback, and WCAG tab keyboard cycling.
+- **`render-budget.js`**: Multi-segment visual budget bar, allocated expense table, live actuals tracking, and the interactive What-If live guest/budget scaling simulator.
+- **`render-timeline.js`**: Interactive checklist milestones and chronologically ordered Run-of-Show cues.
+- **`render-vendors.js`**: Partner cards with contact anchors, status management, and AI inquiry launcher.
+- **`render-creative.js`**: Theme moodboard, interactive color palette, signature drink recipes, invitation copy, and signature activity cards.
+- **`copilot.js`**: Conversational chat message rendering, markdown styling, and contextual prompt chips.
+- **`wizard.js`**: Accessible native `<dialog>` modals with focus trapping for full plan synthesis and customized vendor RFPs.
+- **`export-print.js`**: Native print and PDF binder export trigger.
+- **`app.js`**: Entrypoint (< 200 lines) dedicated strictly to lifecycle bootstrapping, system theme preference matching, and top-level DOM event wiring.
+
+### B. Backend Services & Utilities (`src/`)
+- **`services/geminiClient.js`**: Low-level HTTP communication with Gemini Generative Language API, per-attempt `AbortController` timeouts (25s), exponential retry on 429/5xx, and graceful multi-model failover.
+- **`services/jsonParser.js`**: Defensive JSON parsing resilient against markdown fences, preambles, and conversational conversational wrapping.
+- **`services/planValidator.js`**: Deterministic schema validation across all 7 top-level plan structures, data type enforcement, and 10% budget category sum consistency.
+- **`services/planGenerator.js`**: High-level orchestration that synthesizes master celebration plans and executes automated repair retries if output fails initial validation.
+- **`services/geminiService.js`**: Backwards-compatible barrel re-export ensuring legacy imports and test harnesses run without modification.
+- **`services/cacheService.js`**: High-performance in-memory SHA-256 LRU cache for deterministic API response memoization.
+- **`utils/routeHelpers.js`**: Standardized JSON error response formatting and unified cached AI route execution handler (`handleCachedGeneration`).
+

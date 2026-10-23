@@ -13,7 +13,7 @@ test('Sample Data: Validates integrity of all 3 showcase event plans', () => {
 
   assert.equal(sampleEvents.length, 3, 'Expected 3 pre-loaded showcase events');
 
-  sampleEvents.forEach(evt => {
+  sampleEvents.forEach((evt) => {
     // Validate Summary
     assert.ok(evt.summary.title, 'Event missing title');
     assert.ok(evt.summary.eventType, 'Event missing type');
@@ -22,7 +22,7 @@ test('Sample Data: Validates integrity of all 3 showcase event plans', () => {
 
     // Validate Theme & Palette
     assert.ok(evt.theme.colorPalette.length >= 3, 'Palette should have at least 3 colors');
-    evt.theme.colorPalette.forEach(c => {
+    evt.theme.colorPalette.forEach((c) => {
       assert.match(c.hex, /^#[0-9A-Fa-f]{6}$/, `Invalid hex color: ${c.hex}`);
     });
 

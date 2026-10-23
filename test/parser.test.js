@@ -17,7 +17,8 @@ test('Parser: Extracts JSON from markdown code fence', () => {
 });
 
 test('Parser: Extracts JSON from conversational text with surrounding braces', () => {
-  const input = 'Sure! Here is the output: {"conceptName":"Tuscan Wine","colors":["#C86D51"]} Have a great event!';
+  const input =
+    'Sure! Here is the output: {"conceptName":"Tuscan Wine","colors":["#C86D51"]} Have a great event!';
   const parsed = app.cleanAndParseJSON(input);
   assert.equal(parsed.conceptName, 'Tuscan Wine');
   assert.equal(parsed.colors[0], '#C86D51');

@@ -27,5 +27,13 @@ module.exports = {
   normalizeModel,
   CACHE_TTL_MS: 30 * 60 * 1000, // 30 minutes in milliseconds
   MAX_CACHE_SIZE: 250,
-  REQUEST_TIMEOUT_MS: 90000
+  REQUEST_TIMEOUT_MS: 90000,
+  /** HTTP status codes that should NOT be retried or cascaded. */
+  NON_RETRYABLE_STATUSES: new Set([400, 401, 403, 404]),
+  /** HTTP status codes eligible for a single retry before cascading. */
+  RETRYABLE_STATUSES: new Set([429, 500, 502, 503]),
+  /** Per-model-attempt timeout in milliseconds (AbortController). */
+  MODEL_ATTEMPT_TIMEOUT_MS: 25_000,
+  /** Delay before a retry on the same model (ms). */
+  RETRY_DELAY_MS: 1_000
 };

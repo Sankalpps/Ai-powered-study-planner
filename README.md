@@ -186,9 +186,9 @@ Visit **`http://localhost:3000`** in your browser.
 - Repository footprint: **under 1 MB** (excluding `node_modules`).
 
 ### D. Testing (100/100)
-- **69 automated unit and integration tests** executing via Node's native test runner (`node --test`).
+- **81 automated unit and integration tests** executing via Node's native test runner (`node --test`).
 - **90.5%+ line coverage** verified via `npm run test:coverage`.
-- Mocked tests for cascade fallback, 400 error rejection, 429 backoff, AbortController timeouts, and repair retries.
+- Mocked tests for cascade fallback, 400 error rejection, 429 backoff, AbortController timeouts, repair retries, rate-limiting thresholds, and isolated service modules.
 - Continuous Integration pipeline testing Node.js 18, 20, and 22 (`.github/workflows/ci.yml`).
 
 ```bash
@@ -226,11 +226,20 @@ Celebrio-AI-main/
 │   ├── css/style.css              # Design system, dark mode, responsive styles
 │   ├── js/
 │   │   ├── ai-service.js          # Client-side API and sessionStorage manager
-│   │   ├── app.js                 # Frontend application controller & ARIA bindings
-│   │   └── sample-data.js         # Offline showcase events (Wedding, Birthday, Festival)
+│   │   ├── app.js                 # Frontend application controller & event wiring (< 200 lines)
+│   │   ├── copilot.js             # Conversational Co-Pilot UI message handler
+│   │   ├── export-print.js        # PDF / print binder export handler
+│   │   ├── render-budget.js       # Budget table, breakdown, and What-If simulator
+│   │   ├── render-creative.js     # Overview moodboard & creative studio renderer
+│   │   ├── render-timeline.js     # Timeline milestones & run of show renderer
+│   │   ├── render-vendors.js      # Vendor hub directory & status management
+│   │   ├── sample-data.js         # Offline showcase events (Wedding, Birthday, Festival)
+│   │   ├── state.js               # Application state & localStorage persistence
+│   │   ├── ui-utils.js            # UI utilities, toasts, clipboard, formatting & tabs
+│   │   └── wizard.js              # Accessible modal dialogs & vendor RFP handler
 │   └── index.html                 # Semantic HTML5 single-page application
 ├── src/
-│   ├── config/constants.js        # Environment constants & model defaults
+│   ├── config/constants.js        # Environment constants, status sets & model defaults
 │   ├── middleware/
 │   │   ├── security.js            # Helmet CSP, rate limiters, socket timeouts
 │   │   └── validator.js           # HTML entity escaping & schema bounds validation
@@ -238,24 +247,32 @@ Celebrio-AI-main/
 │   │   ├── chatRoutes.js          # Co-Pilot contextual chat endpoints
 │   │   ├── creativeRoutes.js      # Speeches & vendor RFP generation routes
 │   │   └── planRoutes.js          # Master event plan synthesis with repair retry
-│   └── services/
-│       ├── cacheService.js        # SHA-256 cryptographic response cache
-│       └── geminiService.js       # Model cascade, structured JSON & validation
-├── test/                          # 69 automated test suites
+│   ├── services/
+│   │   ├── cacheService.js        # SHA-256 cryptographic response cache
+│   │   ├── geminiClient.js        # Low-level Gemini HTTP client with model cascading & retry
+│   │   ├── geminiService.js       # Re-export barrel maintaining backwards compatibility
+│   │   ├── jsonParser.js          # Defensive extraction & parsing of AI JSON payloads
+│   │   ├── planGenerator.js       # High-level plan generation with automated repair retry
+│   │   └── planValidator.js       # Output validation for structure, types & budget consistency
+│   └── utils/
+│       └── routeHelpers.js        # Standardized error responses & cached generation runner
+├── test/                          # 81 automated test suites
 │   ├── cache.test.js
 │   ├── caching.test.js
 │   ├── cascade_and_validation.test.js
 │   ├── cascade_mock.test.js
 │   ├── comprehensive.test.js
 │   ├── health.test.js
+│   ├── modules.test.js
 │   ├── parser.test.js
+│   ├── rate_limit.test.js
 │   ├── routes.test.js
 │   ├── sample-data.test.js
 │   ├── sanitization.test.js
 │   ├── security.test.js
 │   └── validation.test.js
 ├── types/index.d.ts               # Complete TypeScript definitions
-├── eslint.config.js               # ESLint flat configuration
+├── eslint.config.js               # ESLint flat configuration (src, server, public, test)
 ├── .prettierrc.json               # Prettier styling rules
 ├── package.json                   # Project scripts and dependencies
 └── server.js                      # Express application entrypoint

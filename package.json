@@ -8,9 +8,9 @@
     "dev": "node server.js",
     "test": "node --test test/*.test.js",
     "test:coverage": "node --test --experimental-test-coverage test/*.test.js",
-    "lint": "eslint src/ server.js",
-    "format": "prettier --check src/ server.js public/js/",
-    "format:fix": "prettier --write src/ server.js public/js/"
+    "lint": "eslint src/ server.js public/js/ test/",
+    "format": "prettier --check src/ server.js public/js/ test/",
+    "format:fix": "prettier --write src/ server.js public/js/ test/"
   },
   "dependencies": {
     "compression": "^1.8.2",

@@ -43,6 +43,9 @@ app.use(helmetMiddleware);
 app.use(compression());
 app.use(requestTimeoutMiddleware);
 app.use('/api/', apiLimiter);
+app.use('/api/generate-plan', aiGenerationLimiter);
+app.use('/api/generate-speech', aiGenerationLimiter);
+app.use('/api/generate-vendor-rfp', aiGenerationLimiter);
 app.use('/api/generate', aiGenerationLimiter);
 app.use('/api/chat', aiGenerationLimiter);
 
